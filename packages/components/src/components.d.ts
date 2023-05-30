@@ -150,6 +150,9 @@ export namespace Components {
         "icon": string;
         "isProfile": boolean;
     }
+    interface IfxNewToggle {
+        "checked": boolean;
+    }
     interface IfxNumberIndicator {
         "inverted": boolean;
     }
@@ -249,6 +252,10 @@ export interface IfxDropdownMenuCustomEvent<T> extends CustomEvent<T> {
 export interface IfxMultiSelectInputItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIfxMultiSelectInputItemElement;
+}
+export interface IfxNewToggleCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIfxNewToggleElement;
 }
 export interface IfxProgressBarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -453,6 +460,12 @@ declare global {
         prototype: HTMLIfxNavbarMenuItemElement;
         new (): HTMLIfxNavbarMenuItemElement;
     };
+    interface HTMLIfxNewToggleElement extends Components.IfxNewToggle, HTMLStencilElement {
+    }
+    var HTMLIfxNewToggleElement: {
+        prototype: HTMLIfxNewToggleElement;
+        new (): HTMLIfxNewToggleElement;
+    };
     interface HTMLIfxNumberIndicatorElement extends Components.IfxNumberIndicator, HTMLStencilElement {
     }
     var HTMLIfxNumberIndicatorElement: {
@@ -585,6 +598,7 @@ declare global {
         "ifx-multi-select-input-item": HTMLIfxMultiSelectInputItemElement;
         "ifx-navbar": HTMLIfxNavbarElement;
         "ifx-navbar-menu-item": HTMLIfxNavbarMenuItemElement;
+        "ifx-new-toggle": HTMLIfxNewToggleElement;
         "ifx-number-indicator": HTMLIfxNumberIndicatorElement;
         "ifx-progress-bar": HTMLIfxProgressBarElement;
         "ifx-radio-button": HTMLIfxRadioButtonElement;
@@ -749,6 +763,10 @@ declare namespace LocalJSX {
         "icon"?: string;
         "isProfile"?: boolean;
     }
+    interface IfxNewToggle {
+        "checked"?: boolean;
+        "onValueChanged"?: (event: IfxNewToggleCustomEvent<boolean>) => void;
+    }
     interface IfxNumberIndicator {
         "inverted"?: boolean;
     }
@@ -870,6 +888,7 @@ declare namespace LocalJSX {
         "ifx-multi-select-input-item": IfxMultiSelectInputItem;
         "ifx-navbar": IfxNavbar;
         "ifx-navbar-menu-item": IfxNavbarMenuItem;
+        "ifx-new-toggle": IfxNewToggle;
         "ifx-number-indicator": IfxNumberIndicator;
         "ifx-progress-bar": IfxProgressBar;
         "ifx-radio-button": IfxRadioButton;
@@ -922,6 +941,7 @@ declare module "@stencil/core" {
             "ifx-multi-select-input-item": LocalJSX.IfxMultiSelectInputItem & JSXBase.HTMLAttributes<HTMLIfxMultiSelectInputItemElement>;
             "ifx-navbar": LocalJSX.IfxNavbar & JSXBase.HTMLAttributes<HTMLIfxNavbarElement>;
             "ifx-navbar-menu-item": LocalJSX.IfxNavbarMenuItem & JSXBase.HTMLAttributes<HTMLIfxNavbarMenuItemElement>;
+            "ifx-new-toggle": LocalJSX.IfxNewToggle & JSXBase.HTMLAttributes<HTMLIfxNewToggleElement>;
             "ifx-number-indicator": LocalJSX.IfxNumberIndicator & JSXBase.HTMLAttributes<HTMLIfxNumberIndicatorElement>;
             "ifx-progress-bar": LocalJSX.IfxProgressBar & JSXBase.HTMLAttributes<HTMLIfxProgressBarElement>;
             "ifx-radio-button": LocalJSX.IfxRadioButton & JSXBase.HTMLAttributes<HTMLIfxRadioButtonElement>;

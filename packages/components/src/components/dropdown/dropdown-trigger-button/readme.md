@@ -1,4 +1,4 @@
-# ifx-button
+# ifx-dropdown-item
 
 
 
@@ -11,45 +11,28 @@
 | ---------- | ---------- | ----------- | ---------------------------------------------------------------- | ----------- |
 | `color`    | `color`    |             | `"danger" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
 | `disabled` | `disabled` |             | `boolean`                                                        | `undefined` |
-| `href`     | `href`     |             | `string`                                                         | `undefined` |
 | `icon`     | `icon`     |             | `string`                                                         | `undefined` |
+| `isOpen`   | `is-open`  |             | `boolean`                                                        | `false`     |
 | `position` | `position` |             | `string`                                                         | `'left'`    |
-| `size`     | `size`     |             | `string`                                                         | `'m'`       |
-| `target`   | `target`   |             | `string`                                                         | `'_self'`   |
+| `size`     | `size`     |             | `"m" \| "s"`                                                     | `'m'`       |
+| `type`     | `type`     |             | `"button" \| "navigation"`                                       | `'button'`  |
 | `variant`  | `variant`  |             | `"outline" \| "outline-text" \| "solid"`                         | `'solid'`   |
-
-
-## Methods
-
-### `setFocus() => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
 
 
 ## Dependencies
 
-### Used by
-
- - [ifx-dropdown-trigger-button](../dropdown/dropdown-trigger-button)
- - [ifx-modal](../modal)
-
 ### Depends on
 
-- [ifx-icon](../icon)
+- [ifx-button](../../button)
+- [ifx-icon](../../icon)
 
 ### Graph
 ```mermaid
 graph TD;
-  ifx-button --> ifx-icon
   ifx-dropdown-trigger-button --> ifx-button
-  ifx-modal --> ifx-button
-  style ifx-button fill:#f9f,stroke:#333,stroke-width:4px
+  ifx-dropdown-trigger-button --> ifx-icon
+  ifx-button --> ifx-icon
+  style ifx-dropdown-trigger-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

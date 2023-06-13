@@ -35,7 +35,6 @@ const Template = (args) => {
     action('Percentage:')(event);
   });
 
-
   return wrapper.innerHTML;
 };
 

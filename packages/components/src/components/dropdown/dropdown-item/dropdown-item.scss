@@ -1,0 +1,19 @@
+@use "../../../../node_modules/@infineon/design-system-tokens/dist/tokens";
+
+.dropdown-item {
+  text-decoration: none;
+  color: tokens.$color-text-black;
+  font-family: "Source Sans Pro";
+  display: block;
+  align-content: center;
+  padding: 8px 16px;
+}
+
+.icon {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.dropdown-item:hover {
+  background-color: tokens.$color-gray-200;
+}

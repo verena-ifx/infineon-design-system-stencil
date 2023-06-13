@@ -1,0 +1,21 @@
+@use "../../../../node_modules/@infineon/design-system-tokens/dist/tokens";
+
+:host {
+  z-index: 9999;
+}
+
+.dropdown-menu {
+  border: 1px solid black;
+  display: none;
+  visibility: hidden;
+  flex-direction: column;
+  min-width: 15em;
+  background-color: white;
+}
+
+
+
+.dropdown-menu.show {
+  display: flex;
+  visibility: visible;
+}

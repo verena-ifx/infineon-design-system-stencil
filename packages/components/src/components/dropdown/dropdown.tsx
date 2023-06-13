@@ -1,5 +1,8 @@
-import { Component, Prop, h, Element, Listen } from "@stencil/core";
-// import { calendar16 } from '@infineon/infineon-icons';
+//dropdown.tsx
+import { Component, Prop, h, Element, Listen, Method, Watch, State, EventEmitter, Event } from "@stencil/core";
+import { createPopper } from '@popperjs/core';
+
+import { IOpenable } from './IOpenable';
 
 @Component({
   tag: 'ifx-dropdown',
@@ -8,121 +11,153 @@ import { Component, Prop, h, Element, Listen } from "@stencil/core";
 })
 
 export class Dropdown {
+  // isOpen prop
+  @Prop() defaultOpen: boolean = false;
+  // internal state for isOpen prop
+  @State() internalIsOpen: boolean = this.defaultOpen;
 
-  @Prop() label: string;
-  @Prop() size: 's' | 'm';
+  // Custom events for opening and closing dropdown
+  @Event() open: EventEmitter;
+  @Event() close: EventEmitter;
+
+  // determine if dropdown is disabled
   @Prop() disabled: boolean;
-  @Prop() icon: boolean = false;
-  @Prop() search: boolean = false;
-  @Prop() filter: boolean = false;
+
+  @Prop() closeOnOutsideClick: boolean = true;
+  @Prop() closeOnMenuClick: boolean = true;
+
+  // Reference to host element
   @Element() el;
+  // Dropdown trigger and menu
+  @State() trigger: HTMLElement;
+  @State() menu: HTMLElement
+  // Popper instance for positioning
+  popperInstance: any;
 
-  @Listen('mousedown', { target: 'document' })
-  handleOutsideClick(event: MouseEvent) {
-    const path = event.composedPath();
-    if (!path.includes(this.el)) {
-      this.closeDropdownMenu();
+  componentDidLoad() {
+    this.updateSlotContent();
+  }
+
+  @Watch('defaultOpen')
+  watchHandlerIsOpen(newValue: boolean) {
+    this.internalIsOpen = newValue;
+  }
+
+  @Watch('disabled')
+  watchHandlerDisabled(newValue: boolean) {
+    if (this.trigger) {
+      (this.trigger as undefined as HTMLIfxDropdownTriggerButtonElement).disabled = newValue;
     }
   }
 
-  getDropdownMenu() {
-    const dropdownMenuComponent = this.el.querySelector('ifx-dropdown-menu').shadowRoot;
-    const dropdownMenuElement = dropdownMenuComponent.querySelector('.dropdown-menu');
-    return dropdownMenuElement
+
+  @Listen('slotchange')
+  watchHandlerSlot() {
+    this.updateSlotContent();
   }
 
-  getDropdownWrapper() {
-    const dropdownWrapper = this.el.shadowRoot.querySelector('.dropdown');
-    return dropdownWrapper
+  // handling assignment of trigger and menu
+  updateSlotContent() {
+    // Get dropdown trigger
+    this.trigger = this.el.querySelector('ifx-dropdown-trigger-button');
+    if (this.trigger) {
+      (this.trigger as undefined as HTMLIfxDropdownTriggerButtonElement).disabled = this.disabled;
+    }
+    // Remove menu if exists from body
+    if (this.menu) {
+      this.menu.remove();
+    }
+    // Get new menu and add to body
+    this.menu = this.el.querySelector('ifx-dropdown-menu');
+    // event handler for closing dropdown on menu click
+    this.menu.removeEventListener('click', this.menuClickHandler.bind(this));
+    this.menu.addEventListener('click', this.menuClickHandler.bind(this));
+    document.body.append(this.menu);
   }
 
-  getDropdownItems() {
-
-    const dropdownMenuItems = this.el.querySelectorAll('ifx-dropdown-item')
-
-    return dropdownMenuItems
-  }
-
-  handleClassList(el, type, className) {
-    el.classList[type](className)
-  }
-
-  toggleDropdownMenu() {
-    const dropdownMenu = this.getDropdownMenu();
-    const dropdownWrapper = this.getDropdownWrapper()
-    this.handleClassList(dropdownMenu, 'toggle', 'show')
-    this.handleClassList(dropdownWrapper, 'toggle', 'show')
-  }
-
-  closeDropdownMenu() {
-    const dropdownMenu = this.getDropdownMenu()
-    const dropdownWrapper = this.getDropdownWrapper()
-    this.handleClassList(dropdownMenu, 'remove', 'show')
-    this.handleClassList(dropdownWrapper, 'remove', 'show')
-  }
-
-  removeActiveMenuItem() {
-    const dropdownMenuItems = this.getDropdownItems()
-    for (let i = 0; i < dropdownMenuItems.length; i++) {
-      this.handleClassList(dropdownMenuItems[i].shadowRoot.querySelector('a'), 'remove', 'active')
+  menuClickHandler() {
+    console.log('menu click', this.closeOnMenuClick)
+    if (this.closeOnMenuClick) {
+      this.closeDropdown();
     }
   }
 
-  toggleCheckbox(target) {
-    target.querySelector('ifx-checkbox').checked = !target.querySelector('ifx-checkbox').checked
-  }
-
-
-  getClickedElement(target) {
-    if (target instanceof SVGElement) {
-      return target.closest('.dropdown-item')
-    } else if (target.className.includes('dropdown-menu')
-      || target.className.includes('form-check-input')) {
-      return false
-    } else {
-      return target.closest('.dropdown-item');
-
+  disconnectedCallback() {
+    // Destroy popper instance if exists
+    if (this.popperInstance) {
+      this.popperInstance.destroy();
+      this.popperInstance = null;
+    }
+    // Remove menu if exists
+    if (this.menu) {
+      this.menu.remove();
     }
   }
 
-  addActiveMenuItem = (e) => {
-    const target = this.getClickedElement(e.composedPath()[0])
-    const isCheckable = e.target.checkable;
+  @Method()
+  async isOpen() {
+    return this.internalIsOpen;
+  }
 
-    if (!target) return;
-    if (isCheckable) {
-      this.toggleCheckbox(target)
-
-      return;
+  @Method()
+  async closeDropdown() {
+    if (this.internalIsOpen) {
+      this.internalIsOpen = false;
+      // sets isOpen prop on trigger and menu
+      (this.trigger as unknown as IOpenable).isOpen = false;
+      (this.menu as unknown as IOpenable).isOpen = false;
+      // Emit close event
+      this.close.emit();
     }
-
-    this.removeActiveMenuItem()
-    this.handleClassList(target, 'add', 'active')
-    this.toggleDropdownMenu()
+    // Destroy popper instance if exists
+    if (this.popperInstance) {
+      this.popperInstance.destroy();
+      this.popperInstance = null;
+    }
   }
 
-  addEventListeners() {
-    const dropdownMenu = this.getDropdownMenu();
-    document.addEventListener('click', this.handleOutsideClick.bind(this))
-    dropdownMenu.addEventListener('click', this.addActiveMenuItem)
+  @Method()
+  async openDropdown() {
+    if (!this.internalIsOpen && !this.disabled) {
+      this.internalIsOpen = true;
+      // sets isOpen prop on trigger and menu
+      (this.trigger as unknown as IOpenable).isOpen = true;
+      (this.menu as unknown as IOpenable).isOpen = true;
+      // Create popper instance for positioning
+      this.popperInstance = createPopper(
+        this.trigger,
+        this.menu,
+        { placement: 'bottom-start' });
+
+      this.open.emit();
+    }
   }
 
-  componentDidRender() {
-    let buttonComponent = this.el.querySelector('ifx-button');
-    if (buttonComponent) {
-      const buttonElement = buttonComponent.shadowRoot.querySelector('button');
-      if (!buttonElement.classList.contains('disabled')) {
-        buttonElement.addEventListener('click', this.toggleDropdownMenu.bind(this))
-        this.addEventListeners()
+  @Listen('click', { capture: true })
+  handleClick(ev: Event) {
+    // Open dropdown if trigger is clicked
+    console.log(ev.target, this.menu)
+    if (ev.target === this.trigger) {
+      if (!this.internalIsOpen) {
+        this.openDropdown();
+      } else {
+        this.closeDropdown();
       }
     }
   }
 
+  @Listen('mousedown', { target: 'document' })
+  handleOutsideClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    // Close dropdown if outside click
+    if (this.closeOnOutsideClick && !this.el.contains(target) && !this.menu.contains(target)) {
+      this.closeDropdown();
+    }
+  }
 
   render() {
     return (
       <div class='dropdown'>
-        <slot name="button" />
         <slot />
       </div>
     )

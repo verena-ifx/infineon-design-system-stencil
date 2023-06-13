@@ -1,0 +1,17 @@
+@use "../../../../node_modules/@infineon/design-system-tokens/dist/tokens";
+
+.rotate {
+  transition: transform 0.3s ease-in-out;
+  transform: rotate(90deg);
+  margin-top: 0em;
+}
+
+.icon {
+  margin-top: 0em;
+}
+
+.dropdown-trigger-button {}
+
+:host {
+  display: inline-block;
+}

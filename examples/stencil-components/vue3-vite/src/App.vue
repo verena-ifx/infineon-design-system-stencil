@@ -1,7 +1,8 @@
 
+import Dropdown from './components/Dropdown.vue'
 
 <template>
-  <h1 class="header">Using Stencil web components in a Vue application</h1>
+  <Dropdown />
   <Alert />
   <Button />
   <Checkbox />

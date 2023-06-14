@@ -7,16 +7,16 @@
 
 ## Properties
 
-| Property   | Attribute  | Description | Type                                                             | Default     |
-| ---------- | ---------- | ----------- | ---------------------------------------------------------------- | ----------- |
-| `color`    | `color`    |             | `"danger" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
-| `disabled` | `disabled` |             | `boolean`                                                        | `undefined` |
-| `icon`     | `icon`     |             | `string`                                                         | `undefined` |
-| `isOpen`   | `is-open`  |             | `boolean`                                                        | `false`     |
-| `position` | `position` |             | `string`                                                         | `'left'`    |
-| `size`     | `size`     |             | `"m" \| "s"`                                                     | `'m'`       |
-| `type`     | `type`     |             | `"button" \| "navigation"`                                       | `'button'`  |
-| `variant`  | `variant`  |             | `"outline" \| "outline-text" \| "solid"`                         | `'solid'`   |
+| Property      | Attribute      | Description | Type                                                             | Default     |
+| ------------- | -------------- | ----------- | ---------------------------------------------------------------- | ----------- |
+| `color`       | `color`        |             | `"danger" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
+| `disabled`    | `disabled`     |             | `boolean`                                                        | `undefined` |
+| `hideChevron` | `hide-chevron` |             | `boolean`                                                        | `false`     |
+| `icon`        | `icon`         |             | `string`                                                         | `undefined` |
+| `isOpen`      | `is-open`      |             | `boolean`                                                        | `false`     |
+| `position`    | `position`     |             | `string`                                                         | `'left'`    |
+| `size`        | `size`         |             | `"m" \| "s"`                                                     | `'m'`       |
+| `variant`     | `variant`      |             | `"outline" \| "outline-text" \| "solid"`                         | `'solid'`   |
 
 
 ## Dependencies

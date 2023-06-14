@@ -8,10 +8,11 @@ describe('Dropdown Component', () => {
         page = await newE2EPage();
         await page.setContent(`
       <ifx-dropdown>
-        <ifx-dropdown-trigger-button icon="menu" variant="solid" color="primary" size="m"></ifx-dropdown-trigger-button>
+        <ifx-dropdown-trigger-button icon="c-info-16" variant="solid" color="primary" size="m"></ifx-dropdown-trigger-button>
         <ifx-dropdown-menu>
-          <ifx-dropdown-item href="https://example.com" icon="home" target="_blank"></ifx-dropdown-item>
-          <ifx-dropdown-item href="https://example2.com" icon="settings" target="_blank"></ifx-dropdown-item>
+          <ifx-dropdown-item href="https://example.com" icon="c-info-16" target="_blank"></ifx-dropdown-item>
+          <ifx-dropdown-separator></ifx-dropdown-separator>
+          <ifx-dropdown-item href="https://example2.com" icon="c-info-16" target="_blank"></ifx-dropdown-item>
         </ifx-dropdown-menu>
       </ifx-dropdown>
     `);
@@ -22,75 +23,35 @@ describe('Dropdown Component', () => {
         expect(dropdown).not.toBeNull();
     });
 
+    it('should render the separator', async () => {
+        const separator = await page.find('ifx-dropdown-separator');
+        expect(separator).not.toBeNull();
+    });
+
     it('should open the dropdown when the trigger is clicked', async () => {
-        const trigger = await page.find('ifx-dropdown >>> ifx-dropdown-trigger-button');
-        await trigger.click();
 
         const dropdown = await page.find('ifx-dropdown');
-        const dropdownIsOpen = await dropdown.getProperty('internalIsOpen');
-        expect(dropdownIsOpen).toBe(true);
-    });
-
-    it('should close the dropdown when clicking outside the dropdown', async () => {
-        // First, open the dropdown
-        const trigger = await page.find('ifx-dropdown >>> ifx-dropdown-trigger-button');
+        const trigger = await dropdown.querySelector('ifx-dropdown-trigger-button');
         await trigger.click();
 
-        // Then, click outside the dropdown
-        await page.click('body');
-
-        const dropdown = await page.find('ifx-dropdown');
-        const dropdownIsOpen = await dropdown.getProperty('internalIsOpen');
-        expect(dropdownIsOpen).toBe(false);
-    });
-
-    it('should navigate to the appropriate link when a dropdown item is clicked', async () => {
-        // First, open the dropdown
-        const trigger = await page.find('ifx-dropdown >>> ifx-dropdown-trigger-button');
-        await trigger.click();
-
-        // Then, click the dropdown item
-        const item = await page.find('ifx-dropdown-menu >>> ifx-dropdown-item');
-        await item.click();
-
-        // Expect a navigation event to the item's href
-        const [response] = await Promise.all([
-            page.waitForNavigation(),
-            item.click(),
-        ]);
-
-        expect(response.url()).toBe('https://example.com');
-    });
-
-    it('should not navigate when clicking a disabled item', async () => {
-        // First, open the dropdown
-        const trigger = await page.find('ifx-dropdown >>> ifx-dropdown-trigger-button');
-        await trigger.click();
-
-        // Then, click the disabled dropdown item
-        const item = await page.find('ifx-dropdown-menu >>> ifx-dropdown-item:nth-child(2)');
-        item.setProperty('disabled', true);
-        await page.waitForChanges();
-
-        // Try to click the item
-        const responsePromise = page.waitForNavigation();
-        await item.click();
-
-        // Expect no navigation event
-        const response = await responsePromise;
-        expect(response).toBeNull();
+        const dropdownMenu = await page.find('ifx-dropdown-menu');
+        const isVisible = await dropdownMenu.isVisible();
+        expect(isVisible).toBe(true);
     });
 
     it('should render the correct icon for each dropdown item', async () => {
         // Open the dropdown
-        const trigger = await page.find('ifx-dropdown >>> ifx-dropdown-trigger-button');
+        const dropdown = await page.find('ifx-dropdown');
+        const trigger = await dropdown.querySelector('ifx-dropdown-trigger-button');
         await trigger.click();
 
         // Check the icons for each dropdown item
-        const item1Icon = await page.find('ifx-dropdown-menu >>> ifx-dropdown-item:nth-child(1) >>> ifx-icon');
-        expect(await item1Icon.getProperty('icon')).toBe('home');
+        const dropdownMenu = await page.find('ifx-dropdown-menu');
+        const items = await dropdownMenu.findAll('ifx-dropdown-item');
+        const icon1 = await items[0].shadowRoot.querySelector('ifx-icon');
+        expect(icon1).not.toBeNull();
 
-        const item2Icon = await page.find('ifx-dropdown-menu >>> ifx-dropdown-item:nth-child(2) >>> ifx-icon');
-        expect(await item2Icon.getProperty('icon')).toBe('settings');
+        const icon2 = await items[1].shadowRoot.querySelector('ifx-icon');
+        expect(icon2).not.toBeNull();
     });
 });

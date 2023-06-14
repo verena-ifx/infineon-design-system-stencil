@@ -1,9 +1,9 @@
-@use "../../../../node_modules/@infineon/design-system-tokens/dist/tokens";
+@use "~@infineon/design-system-tokens/dist/tokens";
+@use "../../../global/font.scss";
 
 .dropdown-item {
   text-decoration: none;
   color: tokens.$color-text-black;
-  font-family: "Source Sans Pro";
   display: block;
   align-content: center;
   padding: 8px 16px;

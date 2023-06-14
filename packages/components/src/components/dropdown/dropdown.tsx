@@ -4,6 +4,23 @@ import { createPopper } from '@popperjs/core';
 
 import { IOpenable } from './IOpenable';
 
+export type Placement =
+  | 'auto'
+  | 'auto-start'
+  | 'auto-end'
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+  | 'bottom'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'right'
+  | 'right-start'
+  | 'right-end'
+  | 'left'
+  | 'left-start'
+  | 'left-end';
+
 @Component({
   tag: 'ifx-dropdown',
   styleUrl: 'dropdown.scss',
@@ -11,20 +28,25 @@ import { IOpenable } from './IOpenable';
 })
 
 export class Dropdown {
+  @Prop() placement: Placement = 'bottom-start'; // New placement prop
+
   // isOpen prop
   @Prop() defaultOpen: boolean = false;
   // internal state for isOpen prop
-  @State() internalIsOpen: boolean = this.defaultOpen;
+  @State() internalIsOpen: boolean = false;
+
+  // isOpen prop
+  @Prop() noAppendToBody: boolean = false;
 
   // Custom events for opening and closing dropdown
-  @Event() open: EventEmitter;
-  @Event() close: EventEmitter;
+  @Event() ifxOpen: EventEmitter;
+  @Event() ifxClose: EventEmitter;
 
   // determine if dropdown is disabled
   @Prop() disabled: boolean;
 
-  @Prop() closeOnOutsideClick: boolean = true;
-  @Prop() closeOnMenuClick: boolean = true;
+  @Prop() noCloseOnOutsideClick: boolean = false;
+  @Prop() noCloseOnMenuClick: boolean = false;
 
   // Reference to host element
   @Element() el;
@@ -34,13 +56,21 @@ export class Dropdown {
   // Popper instance for positioning
   popperInstance: any;
 
-  componentDidLoad() {
+  componentWillLoad() {
+    //maybe not needed
     this.updateSlotContent();
+    this.watchHandlerIsOpen(this.defaultOpen, this.internalIsOpen);
   }
 
   @Watch('defaultOpen')
-  watchHandlerIsOpen(newValue: boolean) {
-    this.internalIsOpen = newValue;
+  watchHandlerIsOpen(newValue: boolean, oldValue: boolean) {
+    if (newValue !== oldValue && newValue !== this.internalIsOpen) {
+      if (newValue) {
+        this.openDropdown();
+      } else {
+        this.closeDropdown();
+      }
+    }
   }
 
   @Watch('disabled')
@@ -58,26 +88,40 @@ export class Dropdown {
 
   // handling assignment of trigger and menu
   updateSlotContent() {
-    // Get dropdown trigger
-    this.trigger = this.el.querySelector('ifx-dropdown-trigger-button');
+    // Get dropdown trigger. name has to start with ifx-dropdown-trigger
+    this.trigger = this.el.querySelector('ifx-dropdown-trigger-button, ifx-dropdown-trigger');
     if (this.trigger) {
       (this.trigger as undefined as HTMLIfxDropdownTriggerButtonElement).disabled = this.disabled;
+      this.trigger.removeEventListener('click', this.triggerClickHandler.bind(this));
+      this.trigger.addEventListener('click', this.triggerClickHandler.bind(this));
     }
     // Remove menu if exists from body
-    if (this.menu) {
-      this.menu.remove();
+    if (!this.noAppendToBody) {
+      if (this.menu) {
+        this.menu.remove();
+      }
+      // Get new menu and add to body
+      this.menu = this.el.querySelector('ifx-dropdown-menu');
+      // event handler for closing dropdown on menu click
+      document.body.append(this.menu);
+    } else {
+      this.menu = this.el.querySelector('ifx-dropdown-menu');
     }
-    // Get new menu and add to body
-    this.menu = this.el.querySelector('ifx-dropdown-menu');
-    // event handler for closing dropdown on menu click
     this.menu.removeEventListener('click', this.menuClickHandler.bind(this));
     this.menu.addEventListener('click', this.menuClickHandler.bind(this));
-    document.body.append(this.menu);
+
   }
 
   menuClickHandler() {
-    console.log('menu click', this.closeOnMenuClick)
-    if (this.closeOnMenuClick) {
+    if (!this.noCloseOnMenuClick) {
+      this.closeDropdown();
+    }
+  }
+
+  triggerClickHandler() {
+    if (!this.internalIsOpen) {
+      this.openDropdown();
+    } else {
       this.closeDropdown();
     }
   }
@@ -107,7 +151,7 @@ export class Dropdown {
       (this.trigger as unknown as IOpenable).isOpen = false;
       (this.menu as unknown as IOpenable).isOpen = false;
       // Emit close event
-      this.close.emit();
+      this.ifxClose.emit();
     }
     // Destroy popper instance if exists
     if (this.popperInstance) {
@@ -125,24 +169,11 @@ export class Dropdown {
       (this.menu as unknown as IOpenable).isOpen = true;
       // Create popper instance for positioning
       this.popperInstance = createPopper(
-        this.trigger,
+        this.el,
         this.menu,
-        { placement: 'bottom-start' });
+        { placement: this.placement });
 
-      this.open.emit();
-    }
-  }
-
-  @Listen('click', { capture: true })
-  handleClick(ev: Event) {
-    // Open dropdown if trigger is clicked
-    console.log(ev.target, this.menu)
-    if (ev.target === this.trigger) {
-      if (!this.internalIsOpen) {
-        this.openDropdown();
-      } else {
-        this.closeDropdown();
-      }
+      this.ifxOpen.emit();
     }
   }
 
@@ -150,7 +181,7 @@ export class Dropdown {
   handleOutsideClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     // Close dropdown if outside click
-    if (this.closeOnOutsideClick && !this.el.contains(target) && !this.menu.contains(target)) {
+    if (!this.noCloseOnOutsideClick && !this.el.contains(target) && !this.menu.contains(target)) {
       this.closeDropdown();
     }
   }

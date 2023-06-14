@@ -16,7 +16,7 @@ export class DropdownItem implements IOpenable {
   @Prop() size: 's' | 'm' = 'm';
   @Prop() disabled: boolean;
   @Prop() position: string = 'left'
-  @Prop() type: 'button' | 'navigation' = 'button';
+  @Prop() hideChevron: boolean = false;
 
   render() {
     return (
@@ -25,11 +25,13 @@ export class DropdownItem implements IOpenable {
         color={this.color}
         size={this.size}
         disabled={this.disabled}
-        class="dropdown-trigger-button">
+        class="dropdown-trigger-button"
+      >
 
         <slot />
-
-        <ifx-icon icon="chevron-right-12" class={`icon${this.isOpen ? ' rotate' : ''}`} />
+        {!this.hideChevron &&
+          <ifx-icon icon="chevron-right-12" class={`icon${this.isOpen ? ' rotate' : ''}`} />
+        }
       </ifx-button>
     )
   }

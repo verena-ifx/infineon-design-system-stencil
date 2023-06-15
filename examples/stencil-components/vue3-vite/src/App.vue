@@ -15,6 +15,7 @@ import Alert from './components/Alert.vue'
 import Button from './components/Button.vue'
 import Checkbox from './components/Checkbox.vue'
 import ProgressBar from './components/ProgressBar.vue'
+import Dropdown from './components/Dropdown.vue'
 
 </script>
 <style scoped>

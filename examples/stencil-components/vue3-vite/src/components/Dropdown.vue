@@ -2,8 +2,8 @@
   <div>
     <ifx-dropdown ref="dropdownRef"
       :disabled="dropdownConfig.disabled"
-      :close-on-menu-click="true"
-      :close-on-outside-click="false"
+      no-close-on-menu-click
+      no-close-on-outside-click
     >
       <ifx-dropdown-trigger-button
         icon="c-info-16"
@@ -80,11 +80,11 @@ import { ref, reactive, onMounted, onUnmounted } from 'vue';
 const dropdownRef = ref(null);
 
 onMounted(() => {
-  dropdownRef.value.addEventListener('open', () => {
+  dropdownRef.value.addEventListener('ifxOpen', () => {
     console.log('Dropdown opened');
   });
 
-  dropdownRef.value.addEventListener('close', () => {
+  dropdownRef.value.addEventListener('ifxClose', () => {
     console.log('Dropdown closed');
   });
 });

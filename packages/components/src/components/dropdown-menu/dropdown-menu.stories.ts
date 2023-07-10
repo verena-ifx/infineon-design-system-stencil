@@ -1,7 +1,5 @@
 export default {
   title: 'Components/Dropdown-Menu',
-  tags: ['autodocs'],
-
   args: {
     icon: "c-check-16"
   }

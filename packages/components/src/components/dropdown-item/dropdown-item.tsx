@@ -48,7 +48,7 @@ export class DropdownItem {
 
   render() {
     return (
-      <a href={this.url} target={this.target} onClick={this.handleItemChange.bind(this)} class={`dropdown-item ${this.checkboxColor}`}>
+      <a href={this.url ? this.url : 'javascript:;'} target={this.target} onClick={this.handleItemChange.bind(this)} class={`dropdown-item ${this.checkboxColor}`}>
         {this.checkable && <ifx-checkbox></ifx-checkbox>}
         {this.icon && <ifx-icon icon={this.icon}></ifx-icon>}
         <label class="form-check-label"><slot /></label>

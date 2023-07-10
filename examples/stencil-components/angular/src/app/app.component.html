@@ -68,4 +68,17 @@
   <h2>Spinner</h2>
   <ifx-spinner variant="semiconductor" size="m"></ifx-spinner>
   <br />
+
+  <h2>Link</h2>
+  <ifx-link color="primary" href="" target="_blank" underline="false">
+    Link
+  </ifx-link>
+  <br />
+
+  <h2>Number indicator</h2>
+  <ifx-number-indicator inverted='false'> {{ numberIndicator }}</ifx-number-indicator>
+  <button (click)="increaseNumber()">+</button>
+  <button (click)="decreaseNumber()">-</button>
+  <br />
+
 </div>

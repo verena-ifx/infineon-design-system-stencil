@@ -1,4 +1,6 @@
- import './App.css'
+
+import './App.css'
+import Link from './components/Link/Link'
 import Button from './components/Button/button';
 import TextField from './components/TextFIeld/TextField';
 import ProgressBar from './components/ProgressBar/ProgressBar';
@@ -9,14 +11,17 @@ import RadioButton from './components/RadioButton/RadioButton';
 import './App.css'
 import Spinner from './Components/Spinner/Spinner'
 
+import './App.css'
+import NumberIndicator from './components/NumberIndicator/NumberIndicator'
 
 function App() {
  
+ 
 
   return (
-       <div>
-    <h1 className="header">Stencil Framework integration - React + TS </h1>
-    <h2>Search Bar</h2>
+    <div>
+      <h1>Stencil Framework integration - React + TS </h1>
+      <h2>Search Bar</h2>
       <SearchBar />
       <br />
 
@@ -42,8 +47,16 @@ function App() {
       
       <h2>Spinner</h2>
       <Spinner />
-      </div>
-    
+      <br />
+      
+      <h2>Link</h2>
+      <Link />
+      <br />
+
+      <h2>Number Indicator</h2>
+      <NumberIndicator />
+      
+    </div>
    )
 }
 

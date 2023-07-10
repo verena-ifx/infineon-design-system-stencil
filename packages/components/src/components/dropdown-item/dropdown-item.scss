@@ -1,6 +1,7 @@
 @use "../../../node_modules/@infineon/design-system-tokens/dist/tokens";
 
 .dropdown-item {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   gap: 12px;

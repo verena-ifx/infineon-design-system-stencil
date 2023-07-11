@@ -116,6 +116,7 @@ export class Chip {
 
     if (!target) {
       if(selectedAnchor.querySelector('ifx-checkbox').checked === false) { 
+        //here. I need to instead emit a different value, Listen for it in checkbox, and change the check.
         this.returnToDefaultLabel()
       }
       return;

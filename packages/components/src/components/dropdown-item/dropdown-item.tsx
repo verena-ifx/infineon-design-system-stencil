@@ -16,12 +16,19 @@ export class DropdownItem {
   @Prop() value: string = ""
   @State() checkboxColor: string = "";
   @Event({ bubbles: false }) itemValues: EventEmitter<Object>;
+  @Prop() url: string = ""
+  @Prop() target: string = "_self"
   @Element() el;
 
-  handleItemChange(event) { 
 
+  handleUrl() { 
+    if(this.url.toLowerCase().trim() === "") { 
+      this.url = null;
+    }
+  }
+
+  handleItemChange(event) { 
     if(event.currentTarget.className.toLowerCase() !== 'form-check-input') { 
-      
       const checkBoxValue = this.el.shadowRoot.querySelector('ifx-checkbox');
       if(checkBoxValue) { 
         if(event.target.nodeName.toUpperCase() === 'IFX-CHECKBOX') { 
@@ -30,7 +37,10 @@ export class DropdownItem {
       } else this.itemValues.emit({value: this.value})
     }
   }
-  
+
+  componentWillLoad() { 
+    this.handleUrl()
+  }
 
   componentWillRender() {
     const ifxDropdown = this.el.closest('ifx-dropdown')
@@ -46,8 +56,8 @@ export class DropdownItem {
 
   render() {
     return (
-      <a href="javascript:;" onClick={this.handleItemChange.bind(this)} class={`dropdown-item ${this.checkboxColor}`}>
-        {this.checkable && <ifx-checkbox></ifx-checkbox> }
+      <a href={this.url ? this.url : undefined} target={this.target} onClick={this.handleItemChange.bind(this)} class={`dropdown-item ${this.checkboxColor}`}>
+        {this.checkable && <ifx-checkbox></ifx-checkbox>}
         {this.icon && <ifx-icon icon={this.icon}></ifx-icon>}
         <label class="form-check-label"><slot /></label>
       </a>

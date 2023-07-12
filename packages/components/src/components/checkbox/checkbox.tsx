@@ -16,9 +16,13 @@ export class Checkbox {
   @State() internalValue: boolean;
   @State() hasSlot: boolean;
   @Event({ bubbles: true, composed: true }) ifxChange: EventEmitter;
+  @Event() internallyUncheckAll: EventEmitter;
 
+  @Prop() checked: boolean = false;
   
-  handleCheckbox() {
+  handleCheckbox(el) {
+    //console.log('here', el.target)
+    this.internallyUncheckAll.emit(el.target)
     if (!this.disabled) {
       this.internalValue = !this.internalValue;
       this.inputElement.checked = this.internalValue;
@@ -28,9 +32,11 @@ export class Checkbox {
 
   @Watch('value')
   valueChanged(newValue: boolean, oldValue: boolean) {
+    console.log('value changed')
     if (newValue !== oldValue) {
       this.internalValue = newValue;
       this.inputElement.checked = this.internalValue; // update the checkbox's checked property
+      //console.log(' this.inputElement.checked',  this.inputElement.checked)
     }
   }
 
@@ -53,7 +59,7 @@ export class Checkbox {
   render() {
     return (
       <div class="checkbox__container">
-        <input type="checkbox" hidden />
+        <input type="checkbox" ref={(el) => (this.inputElement = el)} hidden />
         <div 
         tabindex="0"
         onClick={this.handleCheckbox.bind(this)}

@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, Listen, State } from '@stencil/core';
+import { Component, h, Element, Prop, Listen, State, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'ifx-chip',
@@ -10,6 +10,7 @@ export class Chip {
   @Element() el;
   @Prop() defaultLabel: string;
   @State() isEmpty: boolean = true;
+  @Event() internallyUncheck: EventEmitter
 
   @Listen('mousedown', { target: 'document' })
   handleOutsideClick(event: MouseEvent) {
@@ -18,6 +19,12 @@ export class Chip {
       this.closeDropdownMenu();
     }
   }
+
+//   @Listen('internallyUncheckAll')
+//  uncheckBoxes(target) { 
+//   console.log('target', target.detail)
+//   this.uncheckCheckboxes(target.detail)
+//  }
 
   getDropdownMenu() {
     let dropdownMenuComponent = this.el.querySelector('ifx-dropdown-menu');
@@ -74,10 +81,13 @@ export class Chip {
   }
 
   uncheckCheckboxes(target) { 
+    console.log('uncheck all boxes')
     const dropdownMenuItems =  this.getDropdownItems()
     for(let i = 0; i < dropdownMenuItems.length; i++) { 
       if(dropdownMenuItems[i].shadowRoot.querySelector('a') !== target) { 
-        dropdownMenuItems[i].shadowRoot.querySelector('a').querySelector('ifx-checkbox').checked = false;
+        console.log('anchor inside uncheck all boxes', dropdownMenuItems[i].shadowRoot.querySelector('a').querySelector('ifx-checkbox').value)
+        dropdownMenuItems[i].shadowRoot.querySelector('a').querySelector('ifx-checkbox').value = false;
+        //here 
       }
     }
   }
@@ -90,8 +100,8 @@ export class Chip {
 
   toggleCheckbox(target) {
     this.uncheckCheckboxes(target)
-    target.querySelector('ifx-checkbox').checked = !target.querySelector('ifx-checkbox').checked
-    if(target.querySelector('ifx-checkbox').checked === false) { 
+    target.querySelector('ifx-checkbox').value = !target.querySelector('ifx-checkbox').value
+    if(target.querySelector('ifx-checkbox').value === false) { 
       this.returnToDefaultLabel()
     } 
   }
@@ -115,8 +125,7 @@ export class Chip {
     this.uncheckCheckboxes(selectedAnchor)
 
     if (!target) {
-      if(selectedAnchor.querySelector('ifx-checkbox').checked === false) { 
-        //here. I need to instead emit a different value, Listen for it in checkbox, and change the check.
+      if(selectedAnchor.querySelector('ifx-checkbox').value === false) { 
         this.returnToDefaultLabel()
       }
       return;
@@ -138,9 +147,9 @@ export class Chip {
   }
 
   addItemValueToTextField(value) { 
+    //console.log('value', value)
     const textField = this.getTextField()
     const labelWrapper = textField.querySelector('.chip__wrapper-label')
-    console.log('text field', labelWrapper)
     value.target.setAttribute('target', value.target?.index)
     labelWrapper.innerHTML = value.value
   }

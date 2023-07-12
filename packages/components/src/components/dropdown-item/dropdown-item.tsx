@@ -23,7 +23,7 @@ export class DropdownItem {
 
   handleUrl() { 
     if(this.url.toLowerCase().trim() === "") { 
-      this.url = null;
+      this.url = null; //remove this
     }
   }
 
@@ -32,8 +32,8 @@ export class DropdownItem {
       const checkBoxValue = this.el.shadowRoot.querySelector('ifx-checkbox');
       if(checkBoxValue) { 
         if(event.target.nodeName.toUpperCase() === 'IFX-CHECKBOX') { 
-          this.itemValues.emit({check: !checkBoxValue.checked, value: this.value, target: this.el.closest('ifx-dropdown-item')})
-        } else this.itemValues.emit({check: checkBoxValue.checked, value: this.value, target: this.el.closest('ifx-dropdown-item')})
+          this.itemValues.emit({check: !checkBoxValue.value, value: this.value, target: this.el.closest('ifx-dropdown-item')})
+        } else this.itemValues.emit({check: checkBoxValue.value, value: this.value, target: this.el.closest('ifx-dropdown-item')})
       } else this.itemValues.emit({value: this.value})
     }
   }

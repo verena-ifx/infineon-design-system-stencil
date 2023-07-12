@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property  | Attribute  | Description | Type  | Default     |
-| --------- | ---------- | ----------- | ----- | ----------- |
-| `icon`    | `icon`     |             | `any` | `undefined` |
-| `ifxIcon` | `ifx-icon` |             | `any` | `undefined` |
+| Property  | Attribute  | Description | Type     | Default     |
+| --------- | ---------- | ----------- | -------- | ----------- |
+| `icon`    | `icon`     |             | `string` | `""`        |
+| `ifxIcon` | `ifx-icon` |             | `any`    | `undefined` |
 
 
 ## Dependencies
@@ -19,11 +19,13 @@
 
  - [ifx-accordion-item](../accordion)
  - [ifx-alert](../alert)
+ - [ifx-breadcrumb-item-label](../breadcrumb)
  - [ifx-button](../button)
  - [ifx-checkbox](../checkbox)
  - [ifx-chip](../chips)
  - [ifx-dropdown-item](../dropdown/dropdown-item)
  - [ifx-dropdown-trigger-button](../dropdown/dropdown-trigger-button)
+ - [ifx-example](../template-story-with-markdown)
  - [ifx-icon-button](../icon-button)
  - [ifx-icons-preview](../icons-preview)
  - [ifx-modal](../modal)
@@ -42,11 +44,13 @@
 graph TD;
   ifx-accordion-item --> ifx-icon
   ifx-alert --> ifx-icon
+  ifx-breadcrumb-item-label --> ifx-icon
   ifx-button --> ifx-icon
   ifx-checkbox --> ifx-icon
   ifx-chip --> ifx-icon
   ifx-dropdown-item --> ifx-icon
   ifx-dropdown-trigger-button --> ifx-icon
+  ifx-example --> ifx-icon
   ifx-icon-button --> ifx-icon
   ifx-icons-preview --> ifx-icon
   ifx-modal --> ifx-icon

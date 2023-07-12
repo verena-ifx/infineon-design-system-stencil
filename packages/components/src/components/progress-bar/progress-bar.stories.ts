@@ -1,7 +1,8 @@
-import { action } from '@storybook/addon-actions';
 
 export default {
   title: 'Components/Progress Bar',
+  tags: ['autodocs'],
+
   args: {
     size: "m",
     percentage: 50,
@@ -28,12 +29,6 @@ const Template = (args) => {
       show-label="${args.showLabel}"
     ></ifx-progress-bar>
   `;
-
-  const progressBar = wrapper.querySelector('ifx-progress-bar');
-  progressBar.addEventListener('ifxChange', (event: CustomEvent<Event>) => {
-    console.log('Percentage:', event);
-    action('Percentage:')(event);
-  });
 
   return wrapper.innerHTML;
 };

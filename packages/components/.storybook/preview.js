@@ -1,4 +1,6 @@
-import {defineCustomElements} from '../loader';
+
+import { defineCustomElements } from '../loader';
+
 
 defineCustomElements();
 
@@ -10,4 +12,25 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  options: {
+    storySort: {
+      order: [
+        'Setup & installation',
+        [
+          'About',
+          'Getting started',
+          'Framework integration',
+          [
+            'Wrapper Components',
+            'React + Stencil',
+            'Vue + Stencil'
+          ],
+          'FAQ',
+        ],
+        'Components',
+        'Documentation',
+        // 'Contact'
+      ]
+    }
+  }
 }

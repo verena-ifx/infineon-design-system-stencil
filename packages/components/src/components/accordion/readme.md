@@ -14,10 +14,10 @@
 
 ## Events
 
-| Event           | Description | Type               |
-| --------------- | ----------- | ------------------ |
-| `ifxItemClosed` |             | `CustomEvent<any>` |
-| `ifxItemOpened` |             | `CustomEvent<any>` |
+| Event          | Description | Type               |
+| -------------- | ----------- | ------------------ |
+| `ifxItemClose` |             | `CustomEvent<any>` |
+| `ifxItemOpen`  |             | `CustomEvent<any>` |
 
 
 ## Methods
@@ -45,6 +45,10 @@ Type: `Promise<boolean>`
 
 ## Dependencies
 
+### Used by
+
+ - [ifx-faq](../../stories/setup-and-installation/faq)
+
 ### Depends on
 
 - [ifx-icon](../icon)
@@ -53,6 +57,7 @@ Type: `Promise<boolean>`
 ```mermaid
 graph TD;
   ifx-accordion-item --> ifx-icon
+  ifx-faq --> ifx-accordion-item
   style ifx-accordion-item fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

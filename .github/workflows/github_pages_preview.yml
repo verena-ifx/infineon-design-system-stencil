@@ -50,7 +50,7 @@ jobs:
         id: preview
         with:
           source-dir: ./packages/components/storybook-static
-          github-token: ${{ secrets.GITHUB_TOKEN }}  
+          token: ${{ secrets.GH_TOKEN }}  
 
       - name: Get preview URL
         run: |
@@ -69,7 +69,7 @@ jobs:
             const autoComment = comments.find(c => c.user.login === 'github-actions[bot]');
             if (autoComment) {
               const existingText = autoComment.body;
-              const newText = 'PR Preview URL for Storybook: ${{ steps.preview.outputs.deployment-url }}';
+              const newText = '\n- PR Preview URL for Storybook: ${{ steps.preview.outputs.deployment-url }}';
               if (!existingText.includes(newText)) {
                 await github.issues.updateComment({
                   owner: context.repo.owner,
@@ -80,4 +80,4 @@ jobs:
               }
             }
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

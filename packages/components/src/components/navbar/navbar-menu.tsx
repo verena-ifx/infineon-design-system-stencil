@@ -11,9 +11,10 @@ export class NavbarMenu {
   @Element() el;
   @State() menu: HTMLElement;
 
+
   render() {
     return (
-      <div class='navbar-menu'>
+      <div class={`navbar-menu`}>
         <slot />
       </div >
     );

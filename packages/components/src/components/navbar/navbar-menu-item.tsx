@@ -13,6 +13,10 @@ export class NavbarMenuItem {
   @Prop() target: string = "_self"
   @Prop() hide: boolean = false;
 
+
+  componendWillUpdate() { 
+    console.log('hide', this.hide)
+  }
   
   render() {
     let hrefAttr = this.href ? { href: this.href, target: this.target } : {};

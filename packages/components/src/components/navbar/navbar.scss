@@ -370,9 +370,10 @@
     justify-content: flex-end;
     padding: 0;
     gap: 8px;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+    flex: 1;
+    //flex: none;
+    //order: 1;
+    //flex-grow: 0;
 
     & .navbar__burger-icon-wrapper {
       display: flex;
@@ -412,9 +413,12 @@
       flex-direction: column;
       align-items: flex-start;
       padding: 0px;
-      flex: none;
-      order: 0;
-      flex-grow: 0;
+      flex: 1;
+      //flex: none;
+      //order: 0;
+      //flex-grow: 0;
+
+      //border: 2px solid red;
 
       & .navbar__container-right-content-navigation-group {
         display: flex;
@@ -422,9 +426,12 @@
         justify-content: flex-end;
         align-items: center;
         padding: 0px;
-        flex: none;
-        order: 0;
-        flex-grow: 0;
+        //flex: none;
+        //order: 0;
+        //flex-grow: 0;
+
+        //border: 2px solid red;
+        width: 100%;
 
         & .navbar__container-right-content-navigation-item,
         & .navbar__container-right-content-navigation-item-profile,
@@ -434,9 +441,15 @@
           align-items: center;
           padding: 0px 8px;
           gap: 4px;
-          flex: none;
-          order: 0;
-          flex-grow: 0;
+          //flex: none;
+          //order: 0;
+          //flex-grow: 0;
+          
+          width: 100%;
+
+          & .navbar__container-right-content-navigation-item { //temporary test. delete!
+            border: 2px solid red;
+          }
 
           & .navbar__container-right-content-navigation-item-search-bar-icon-wrapper {
             display: flex;
@@ -445,12 +458,12 @@
             align-items: center;
             padding: 0px;
             gap: 8px;
-            flex: none;
-            order: 0;
-            flex-grow: 0;
-            //width: 24px;
-            //height: 24px;
-            max-width: 200px;
+            //flex: none;
+            //order: 0;
+            //flex-grow: 0;
+            //max-width: 200px;
+
+            width: 100%;
           }
 
           & .navbar__container-right-content-navigation-item-navigation-profile {
